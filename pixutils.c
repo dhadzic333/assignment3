@@ -25,7 +25,14 @@ void pixMap_destroy (pixMap **p){
  // if its not 0, then you malloced something! -> free it! if it is 0, you don't have to free it.
 	pixMap *this_ptr=*p;
 	if(this_ptr->pixArray_arrays) free(this_ptr->pixArray_arrays);
-	if(this_ptr->pixArray_blocks) free(this_ptr->pixArray_blocks);
+	if(this_ptr->pixArray_blocks) {
+		for (int i = 0; i < this_ptr->imageHeight; i++) {
+			if (this_ptr->pixArray_blocks[i]) {
+				free(this_ptr->pixArray_blocks[i]);
+			}
+		}
+		free(this_ptr->pixArray_blocks);
+	}
 	if(this_ptr->pixArray_overlay) free(this_ptr->pixArray_overlay);
 	if (this_ptr->image) free(this_ptr->image); 
 	if(*p) free(*p);
